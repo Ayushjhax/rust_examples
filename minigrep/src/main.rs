@@ -1,46 +1,47 @@
 use std::env;
-use std::fs;
+use std::process;
+
+// Import from lib.rs
+use minigrep::{Config, run};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let query = &args[1];
-    let filename = &args[2];
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    println!("Searching for {}", query);
-    println!("In file {}", filename);
+    // let query = &args[1];
+    // let filename = &args[2];
 
-    let contents = fs::read_to_string(filename)
-        .expect("Should have been able to read the file");
+    // println!("Searching for {}", query);
+    // println!("In file {}", filename);
 
-    println!("With text:\n{}", contents);
+    // let (query, filename) = parse_config(&args);
 
-    let results = search(&query, &contents);
+    // let config = parse_config(&args);
 
-    for line in results {
-        println!("{}", line);
-    }
-}
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.filename);
 
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-    results
-}
-
-fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase();
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
+    if let Err(e) = run(config) {
+        eprintln!("Application error: {}", e);
+        process::exit(1);
     }
 
-    results
+    // Removed duplicate file reading and run() call since it's handled in run()
+
+    // let results = search(&query, &contents);
+
+    // for line in results {
+    //     println!("{}", line);
+    // }
+
+    // let results = search(&config.query, &contents);
+    // for line in results {
+    //     println!("{}", line);
+    // }
+
+    // let poem = fs::read_to_string("poem.txt").expect("Should have been able to read the file");
+    // println!("Poem:\n{}", poem);
 }
