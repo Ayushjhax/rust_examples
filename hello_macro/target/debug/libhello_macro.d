@@ -1,0 +1,1 @@
+/Users/ayush/Desktop/Rust_Book/hello_macro/target/debug/libhello_macro.rlib: /Users/ayush/Desktop/Rust_Book/hello_macro/hello_macro_derive/src/lib.rs /Users/ayush/Desktop/Rust_Book/hello_macro/src/lib.rs
